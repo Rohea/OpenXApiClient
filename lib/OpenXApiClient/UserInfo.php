@@ -13,8 +13,10 @@
 /**
  * @package    OpenXDll
  * @author     Matteo Beccati <matteo.beccati@openx.org>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  */
+namespace OpenXApiClient;
 
 // Require the base Info class.
 require_once 'Info.php';

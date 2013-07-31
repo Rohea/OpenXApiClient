@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -13,20 +12,23 @@
 /**
  * @package    OpenXDll
  * @author     Ivan Klishch <iklishch@lohika.com>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This files describes the ZoneInfo class.
- *
  */
+
+namespace OpenXApiClient;
 
 // Include base info class.
 require_once 'Info.php';
+use Info;
 
 /**
  *  The ZoneInfo class extends the base Info class and contains information about the zone.
  *
  */
 
-class OA_Dll_ZoneInfo extends OA_Info
+class ZoneInfo extends Info
 {
 
 
@@ -107,14 +109,14 @@ class OA_Dll_ZoneInfo extends OA_Info
      * @var string $append
      */
     var $append;
-    
+
     /**
      * This field provides the filename of the zone.
      *
      * @var string $prepend
      */
     var $prepend;
-    
+
     /**
      * This method sets all default values when adding a new zone.
      *

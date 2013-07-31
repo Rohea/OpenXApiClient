@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -9,10 +8,12 @@
 | License: GPLv2 or later, see the LICENSE.txt file.                        |
 +---------------------------------------------------------------------------+
 */
-
+/*
 if (!@include('XML/RPC.php')) {
     die('Error: cannot load the PEAR XML_RPC class');
 }
+*/
+namespace OpenXApiClient;
 
 require_once 'XmlRpcUtils.php';
 
@@ -33,23 +34,24 @@ require_once('ZoneInfo.php');
  * @package    OpenX
  * @subpackage ExternalLibrary
  * @author     Chris Nutting <Chris.Nutting@openx.org>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  */
-
-class OA_Api_Xmlrpc
+class OpenXApiClient
 {
-    var $host;
-    var $basepath;
-    var $port;
-    var $ssl;
-    var $timeout;
-    var $username;
-    var $password;
+
+    protected $host;
+    protected $basepath;
+    protected $port;
+    protected $ssl;
+    protected $timeout;
+    protected $username;
+    protected $password;
     /**
      * The sessionId is set by the logon() method called during the constructor.
      *
      * @var string The remote session ID is used in all subsequent transactions.
      */
-    var $sessionId;
+    protected $sessionId;
     /**
      * Purely for my own use, this parameter lets me pass debug querystring parameters into
      * the remote call to trigger my Zend debugger on the server-side
@@ -59,10 +61,10 @@ class OA_Api_Xmlrpc
      * @var string The querystring parameters required to trigger my remote debugger
      *             or empty for no remote debugging
      */
-    var $debug = '';
+    protected $debug = '';
 
     /**
-     * PHP4 style constructor
+     * Constructor
      *
      * @param string $host      The name of the host to which to connect.
      * @param string $basepath  The base path to XML-RPC services.
@@ -73,7 +75,7 @@ class OA_Api_Xmlrpc
      * @param bool   $ssl       Set to true to connect using an SSL connection.
      * @param int    $timeout   The timeout period to wait for a response.
      */
-    function OA_Api_Xmlrpc($host, $basepath, $username, $password, $port = 0, $ssl = false, $timeout = 15)
+    public function __construct($host, $basepath, $username, $password, $port = 0, $ssl = false, $timeout = 15)
     {
         $this->host = $host;
         $this->basepath = $basepath;
@@ -655,7 +657,7 @@ class OA_Api_Xmlrpc
 
         return $oBannerInfo;
     }
-    
+
     /**
      * This method returns TargetingInfo for a specified banner.
      *
@@ -692,7 +694,7 @@ class OA_Api_Xmlrpc
         }
         return (bool) $this->_sendWithSession('ox.setBannerTargeting', array((int) $bannerId, $aTargetingInfoObjects));
     }
-    
+
     /**
      * This method returns a list of banners for a specified campaign.
      *

@@ -13,10 +13,12 @@
 /**
  * @package    OpenX
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the XmlRpcUtils class.
  *
  */
+namespace OpenXApiClient;
 
 // Require the XML-RPC classes.
 require_once 'XML/RPC/Server.php';

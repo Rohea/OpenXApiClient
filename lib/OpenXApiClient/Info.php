@@ -10,43 +10,43 @@
 +---------------------------------------------------------------------------+
 */
 
+namespace OpenXApiClient;
+
 /**
  * @package    OpenXDll
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * The Info class is the base class for all info classes.
- *
  */
-
-
-class OA_Info
+abstract class Info
 {
 
-    function getFieldsTypes()
-    {
-        die('Please define this method in each derivative class');
-    }
+    /**
+     * This function must be defined in all subclasses
+     */
+    public abstract function getFieldsTypes();
 
-    function getFieldType($fieldName)
+    public function getFieldType($fieldName)
     {
         $aFieldsTypes = $this->getFieldsTypes();
         if (!isset($aFieldsTypes) || !is_array($aFieldsTypes)) {
-            die('Please provide field types array for Info object creation');
+            throw new \InvalidArgumentException('Please provide field types array for Info object creation');
         }
 
         if (!array_key_exists($fieldName, $aFieldsTypes)) {
-            die('Unknown type for field \'' . $fieldName .'\'');
+            throw new \InvalidArgumentException("Unknown type for field $fieldName.");
         }
         return $aFieldsTypes[$fieldName];
     }
 
-    function readDataFromArray($aEntityData)
+    public function readDataFromArray($aEntityData)
     {
         $aFieldsTypes = $this->getFieldsTypes();
         foreach($aFieldsTypes as $fieldName => $fieldType) {
             if (array_key_exists($fieldName, $aEntityData)) {
                 if ($fieldType == 'date') {
-                    $this->$fieldName = new Date($aEntityData[$fieldName]);
+                    $this->$fieldName = new \DateTime($aEntityData[$fieldName]);
                 } else {
                     $this->$fieldName = $aEntityData[$fieldName];
                 }
@@ -54,10 +54,8 @@ class OA_Info
         }
     }
 
-    function toArray()
+    public function toArray()
     {
         return (array)$this;
     }
 }
-
-?>

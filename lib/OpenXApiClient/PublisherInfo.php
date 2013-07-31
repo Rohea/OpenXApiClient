@@ -13,10 +13,12 @@
 /**
  * @package    OpenXDll
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the PublisherInfo class.
  *
  */
+namespace OpenXApiClient;
 
 // Require the base Info class.
 require_once 'Info.php';

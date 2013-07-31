@@ -703,7 +703,7 @@ class OA_Api_Xmlrpc
 
         return $oBannerInfo;
     }
-    
+
     /**
      * This method returns TargetingInfo for a specified banner.
      *

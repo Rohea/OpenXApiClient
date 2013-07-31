@@ -13,10 +13,12 @@
 /**
  * @package    OpenXDll
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the AgencyInfo class.
  *
  */
+namespace OpenXApiClient;
 
 // Require the base info class.
 require_once 'Info.php';

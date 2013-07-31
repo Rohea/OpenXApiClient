@@ -13,10 +13,12 @@
 /**
  * @package    OpenXDll
  * @author     Ivan Klishch <iklishch@lohika.com>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the BannerInfo class.
  *
  */
+namespace OpenXApiClient;
 
 // Require the base info class.
 require_once 'Info.php';
@@ -200,7 +202,7 @@ class OA_Dll_BannerInfo extends OA_Info
      * @var string $alt
      */
     var $alt;
-    
+
     /**
      * This field provides the filename of the banner.
      *

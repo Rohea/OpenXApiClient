@@ -13,10 +13,12 @@
 /**
  * @package    OpenXDll
  * @author     Heiko Weber <heiko@wecos.de>
+ * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the ChannelInfo class.
  *
  */
+namespace OpenXApiClient;
 
 // Require the base info class.
 require_once 'Info.php';
