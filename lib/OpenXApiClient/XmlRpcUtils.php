@@ -18,6 +18,8 @@
  */
 namespace OpenXApiClient;
 
+use Exception\UnsupportedXmlRpcTypeException;
+
 // Require the XML-RPC classes.
 require_once 'XML/RPC/Server.php';
 
@@ -82,8 +84,8 @@ class XmlRpcUtils
             case 'custom':
                 return $variable;
         }
-        //@todo: Change this to specific custom exception
-        throw new \InvalidArgumentException("Unsupported Xml Rpc type $type.");
+
+        throw new UnsupportedXmlRpcTypeException($type, "Unsupported Xml Rpc type $type.");
     }
 
 }
