@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -13,7 +12,7 @@
 namespace OpenXApiClient;
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
@@ -21,7 +20,6 @@ namespace OpenXApiClient;
  */
 abstract class Info
 {
-
     /**
      * This function must be defined in all subclasses
      */

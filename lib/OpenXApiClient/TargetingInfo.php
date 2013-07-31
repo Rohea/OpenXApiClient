@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -11,36 +10,33 @@
 */
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
- *
  */
 namespace OpenXApiClient;
 
-// Require the base Info class.
-require_once 'Info.php';
+use Info;
 
 /**
  * The OA_Dll_PublisherInfo class extends the base OA_Info class and contains
  * information about publisher
- *
  */
-class OA_Dll_TargetingInfo extends OA_Info
+class TargetingInfo extends Info
 {
     /**
      * 99% will be "and" or "or", but that's not enforced
      *
      * @var string
      */
-    public $logical;
+    protected $logical;
 
     /**
      * This is the plugin-component identifier
      *
      * @var string
      */
-    public $type;
+    protected $type;
 
     /**
      * String showing the operation to be applied (e.g.: '==', '!=', '>=',
@@ -48,23 +44,22 @@ class OA_Dll_TargetingInfo extends OA_Info
      *
      * @var string
      */
-    public $comparison;
+    protected $comparison;
 
     /**
      * The exact structure varies from component to component
      *
      * @var string
      */
-    public $data;
+    protected $data;
 
-
-    function getFieldsTypes()
+    public function getFieldsTypes()
     {
         return array(
-                    'logical' => 'string',
-                    'type' => 'string',
-                    'comparison' => 'string',
-                    'data' => 'string'
-                );
+            'logical' => 'string',
+            'type' => 'string',
+            'comparison' => 'string',
+            'data' => 'string'
+        );
     }
 }

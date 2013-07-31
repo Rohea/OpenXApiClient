@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -11,85 +10,79 @@
 */
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Matteo Beccati <matteo.beccati@openx.org>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
- *
  */
 namespace OpenXApiClient;
 
-// Require the base Info class.
-require_once 'Info.php';
+use Info;
 
 /**
  * The OA_Dll_UserInfo class extends the base OA_Info class and
  * contains information about the user.
- *
  */
-
-class OA_Dll_UserInfo extends OA_Info
+class UserInfo extends Info
 {
     /**
      * This fields provides the ID of the user
      *
      * @var int
      */
-    var $userId;
+    protected $userId;
 
     /**
      * This option provides the name of the contact for the user.
      *
      * @var string $contactName
      */
-    var $contactName;
+    protected $contactName;
 
     /**
      * This field provides the email address of the user.
      *
      * @var string $emailAddress
      */
-    var $emailAddress;
+    protected $emailAddress;
 
     /**
      * This option provides the username of the user.
      *
      * @var string $username
      */
-    var $username;
+    protected $username;
 
     /**
      * This field provides the password of the user.
      *
      * @var string $password
      */
-    var $password;
+    protected $password;
 
     /**
      * This field provides the default account ID of the user.
      *
      * @var int $defaultAccountId
      */
-    var $defaultAccountId;
+    protected $defaultAccountId;
 
     /**
      * This field provides the status of the user.
      *
      * @var int $active
      */
-    var $active;
+    protected $active;
 
-    function getFieldsTypes()
+    public function getFieldsTypes()
     {
         return array(
-                    'userId' => 'integer',
-                    'contactName' => 'string',
-                    'emailAddress' => 'string',
-                    'username' => 'string',
-                    'password' => 'string',
-                    'defaultAccountId' => 'integer',
-                    'active' => 'integer',
-                );
+            'userId' => 'integer',
+            'contactName' => 'string',
+            'emailAddress' => 'string',
+            'username' => 'string',
+            'password' => 'string',
+            'defaultAccountId' => 'integer',
+            'active' => 'integer',
+        );
     }
 }
-
-?>

@@ -31,8 +31,7 @@ require_once('ZoneInfo.php');
  * A library class to provide XML-RPC routines on
  * a web server to enable it to manipulate objects in OpenX using the web services API.
  *
- * @package    OpenX
- * @subpackage ExternalLibrary
+ * @package    OpenXApiClient
  * @author     Chris Nutting <Chris.Nutting@openx.org>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  */

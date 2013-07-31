@@ -10,24 +10,19 @@
 */
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Ivan Klishch <iklishch@lohika.com>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This files describes the ZoneInfo class.
  */
-
 namespace OpenXApiClient;
 
-// Include base info class.
-require_once 'Info.php';
 use Info;
 
 /**
  *  The ZoneInfo class extends the base Info class and contains information about the zone.
- *
  */
-
 class ZoneInfo extends Info
 {
 
@@ -37,49 +32,49 @@ class ZoneInfo extends Info
      *
      * @var integer $zoneId
      */
-    var $zoneId;
+    protected $zoneId;
 
     /**
      * The publisherID is the ID of the publisher associated with the zone.
      *
      * @var integer $publisherId
      */
-    var $publisherId;
+    protected $publisherId;
 
     /**
      * The zoneName is the name of the zone.
      *
      * @var string $zoneName
      */
-    var $zoneName;
+    protected $zoneName;
 
     /**
      * The type variable type of zone, one of the following: banner, interstitial, popup, text, email.
      *
      * @var integer $type
      */
-    var $type;
+    protected $type;
 
     /**
      * The width variable is the width of the zone.
      *
      * @var integer $width
      */
-    var $width;
+    protected $width;
 
     /**
      * The height variable is the height of the zone.
      *
      * @var integer $height
      */
-    var $height;
+    protected $height;
 
     /**
      * Frequency capping: total views per user.
      *
      * @var integer $capping
      */
-    var $capping;
+    protected $capping;
 
     /**
      * Frequency capping: total views per period.
@@ -87,43 +82,41 @@ class ZoneInfo extends Info
      *
      * @var integer $sessionCapping
      */
-    var $sessionCapping;
+    protected $sessionCapping;
 
     /**
      * Frequency capping: reset period, in seconds.
      *
      * @var integer $block
      */
-    var $block;
+    protected $block;
 
     /**
      * This field provides any additional comments to be stored.
      *
      * @var string $comments
      */
-    var $comments;
+    protected $comments;
 
     /**
      * This field provides appended code for this zone.
      *
      * @var string $append
      */
-    var $append;
+    protected $append;
 
     /**
      * This field provides the filename of the zone.
      *
      * @var string $prepend
      */
-    var $prepend;
+    protected $prepend;
 
     /**
      * This method sets all default values when adding a new zone.
-     *
-     * @access public
-     *
      */
-    function setDefaultForAdd() {
+    public function setDefaultForAdd()
+    {
         if (is_null($this->type)) {
             $this->type = 0;
         }
@@ -137,7 +130,7 @@ class ZoneInfo extends Info
         }
         if (is_null($this->capping)) {
             // Leave null
-    }
+        }
 
         if (is_null($this->sessionCapping)) {
             // Leave null
@@ -155,23 +148,21 @@ class ZoneInfo extends Info
      *
      * @return array
      */
-    function getFieldsTypes()
+    public function getFieldsTypes()
     {
         return array(
-                    'zoneId' => 'integer',
-                    'publisherId' => 'integer',
-                    'zoneName' => 'string',
-                    'type' => 'integer',
-                    'width' => 'integer',
-                    'height' => 'integer',
-                    'capping' => 'integer',
-                    'sessionCapping' => 'integer',
-                    'block' => 'integer',
-                    'comments' => 'string',
-                    'append' => 'string',
-                    'prepend' => 'string',
-                );
+            'zoneId' => 'integer',
+            'publisherId' => 'integer',
+            'zoneName' => 'string',
+            'type' => 'integer',
+            'width' => 'integer',
+            'height' => 'integer',
+            'capping' => 'integer',
+            'sessionCapping' => 'integer',
+            'block' => 'integer',
+            'comments' => 'string',
+            'append' => 'string',
+            'prepend' => 'string',
+        );
     }
 }
-
-?>

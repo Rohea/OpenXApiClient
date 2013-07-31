@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -11,24 +10,20 @@
 */
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Ivan Klishch <iklishch@lohika.com>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the AdvertiserInfo class.
- *
  */
 namespace OpenXApiClient;
 
-// Require the base info class.
-require_once 'Info.php';
+use Info;
 
 /**
  *  The AdvertiserInfo class extends the base Info class and contains information about advertisers.
- *
  */
-
-class OA_Dll_AdvertiserInfo extends OA_Info
+class AdvertiserInfo extends Info
 {
 
     /**
@@ -36,62 +31,60 @@ class OA_Dll_AdvertiserInfo extends OA_Info
      *
      * @var integer $advertiserId
      */
-    var $advertiserId;
+    protected $advertiserId;
 
     /**
      * This field contains the ID of the agency account.
      *
      * @var integer $accountId
      */
-    var $accountId;
+    protected $accountId;
 
     /**
      * The agencyID variable is the ID of the agency to which the advertiser is associated.
      *
      * @var integer $agencyId
      */
-    var $agencyId;
+    protected $agencyId;
 
     /**
      * The advertiserName variable is the name of the advertiser.
      *
      * @var string $advertiserName
      */
-    var $advertiserName;
+    protected $advertiserName;
 
     /**
      * The contactName variable is the name of the contact.
      *
      * @var string $contactName
      */
-    var $contactName;
+    protected $contactName;
 
     /**
      * The emailAddress variable is the email address for the contact.
      *
      * @var string $emailAddress
      */
-    var $emailAddress;
+    protected $emailAddress;
 
     /**
      * This field provides any additional comments to be stored.
      *
      * @var string $comments
      */
-    var $comments;
+    protected $comments;
 
-    function getFieldsTypes()
+    public function getFieldsTypes()
     {
         return array(
-                    'advertiserId' => 'integer',
-                    'accountId' => 'integer',
-                    'agencyId' => 'integer',
-                    'advertiserName' => 'string',
-                    'contactName' => 'string',
-                    'emailAddress' => 'string',
-                    'comments' => 'string',
-                );
+            'advertiserId' => 'integer',
+            'accountId' => 'integer',
+            'agencyId' => 'integer',
+            'advertiserName' => 'string',
+            'contactName' => 'string',
+            'emailAddress' => 'string',
+            'comments' => 'string',
+        );
     }
 }
-
-?>

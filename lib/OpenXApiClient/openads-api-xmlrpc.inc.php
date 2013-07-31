@@ -30,11 +30,9 @@ require_once('ZoneInfo.php');
  * A library class to provide XML-RPC routines on
  * a web server to enable it to manipulate objects in OpenX using the web services API.
  *
- * @package    OpenX
- * @subpackage ExternalLibrary
+ * @package    OpenXApiClient
  * @author     Chris Nutting <Chris.Nutting@openx.org>
  */
-
 class OA_Api_Xmlrpc
 {
     var $host;
@@ -742,7 +740,7 @@ class OA_Api_Xmlrpc
         return (bool) $this->_sendWithSession('BannerXmlRpcService.php',
                                               'setBannerTargeting', array((int) $bannerId, $aTargetingInfoObjects));
     }
-    
+
     /**
      * This method returns a list of banners for a specified campaign.
      *

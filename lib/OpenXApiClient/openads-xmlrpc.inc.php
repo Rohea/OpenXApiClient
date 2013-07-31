@@ -20,8 +20,7 @@ if (!@include('XML/RPC.php')) {
  *
  * For use with OpenX PHP-based XML-RPC invocation tags.
  *
- * @package    OpenX
- * @subpackage ExternalLibrary
+ * @package    OpenXApiClient
  * @author     Matteo Beccati <matteo.beccati@openx.org>
  */
 class OA_XmlRpc

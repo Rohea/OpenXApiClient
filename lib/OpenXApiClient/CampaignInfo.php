@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -11,112 +10,108 @@
 */
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the CampaignInfo class.
- *
  */
 namespace OpenXApiClient;
 
-// Require the base info class.
-require_once 'Info.php';
+use Info;
 
 /**
  *  The campaignInfo class extends the base Info class and contains information about the campaign.
- *
  */
-
-class OA_Dll_CampaignInfo extends OA_Info
+class CampaignInfo extends Info
 {
     /**
      * The campaignId variable is the unique ID for the campaign.
      *
      * @var integer $campaignId
      */
-    var $campaignId;
+    protected $campaignId;
 
     /**
      * The advertiserID variable is the ID of the advertiser associated with the campaign.
      *
      * @var integer $advertiserId
      */
-    var $advertiserId;
+    protected $advertiserId;
 
     /**
      * The campaignName variable is the name of the campaign.
      *
      * @var string $campaignName
      */
-    var $campaignName;
+    protected $campaignName;
 
     /**
      * The startDate variable is the date the campaign will start.
      *
      * @var date $startDate
      */
-    var $startDate;
+    protected $startDate;
 
     /**
      * The endDate variable is the date the campaign will end.
      *
      * @var date $endDate
      */
-    var $endDate;
+    protected $endDate;
 
     /**
      * The impressions variable is the number of impressions booked for the campaign.
      *
      * @var integer $impressions
      */
-    var $impressions;
+    protected $impressions;
 
     /**
      * The clicks variable is the number of clicks booked for the campaign.
      *
      * @var integer $clicks
      */
-    var $clicks;
+    protected $clicks;
 
     /**
      * The priority variable is the priority level set for the campaign.
      *
      * @var integer $priority
      */
-    var $priority;
+    protected $priority;
 
     /**
      * The weight variable is the weight set for the campaign.
      *
      * @var integer $weight
      */
-    var $weight;
+    protected $weight;
 
     /**
      *
      * @var integer $targetImpressions
      */
-    var $targetImpressions;
+    protected $targetImpressions;
 
     /**
      *
      * @var integer $targetClick
      */
-    var $targetClicks;
+    protected $targetClicks;
 
     /**
      *
      * @var integer $targetConversions
      */
-    var $targetConversions;
+    protected $targetConversions;
 
     /**
      * Revenue amount, eg 1.55.
      *
      * @var double $revenue
      */
-    var $revenue;
+    protected $revenue;
 
     /**
      * Revenue type (CPM, CPA, etc) as defined in constants.php.
@@ -124,14 +119,14 @@ class OA_Dll_CampaignInfo extends OA_Info
      *
      * @var integer $revenueType
      */
-    var $revenueType;
+    protected $revenueType;
 
     /**
      * Frequency capping: total views per user.
      *
      * @var integer $capping
      */
-    var $capping;
+    protected $capping;
 
     /**
      * Frequency capping: total views per period.
@@ -139,14 +134,14 @@ class OA_Dll_CampaignInfo extends OA_Info
      *
      * @var integer $sessionCapping
      */
-    var $sessionCapping;
+    protected $sessionCapping;
 
     /**
      * Frequency capping: reset period, in seconds.
      *
      * @var integer $block
      */
-    var $block;
+    protected $block;
 
 
     /**
@@ -154,13 +149,13 @@ class OA_Dll_CampaignInfo extends OA_Info
      *
      * @var string $comments
      */
-    var $comments;
+    protected $comments;
 
     /**
      * This function sets all default values when adding new campaign.
-     *
      */
-    function setDefaultForAdd() {
+    public function setDefaultForAdd()
+    {
         if (is_null($this->impressions)) {
             $this->impressions = -1;
         }
@@ -212,33 +207,29 @@ class OA_Dll_CampaignInfo extends OA_Info
     /**
      * This method returns an array of fields with their corresponding types.
      *
-     * @access public
-     *
      * @return array
      */
-    function getFieldsTypes()
+    public function getFieldsTypes()
     {
         return array(
-                    'campaignId' => 'integer',
-                    'advertiserId' => 'integer',
-                    'campaignName' => 'string',
-                    'startDate' => 'date',
-                    'endDate' => 'date',
-                    'impressions' => 'integer',
-                    'clicks' => 'integer',
-                    'priority' => 'integer',
-                    'weight' => 'integer',
-                    'targetImpressions' => 'integer',
-                    'targetClicks' => 'integer',
-                    'targetConversions' => 'integer',
-                    'revenue' => 'double',
-                    'revenueType' => 'integer',
-                    'capping' => 'integer',
-                    'sessionCapping' => 'integer',
-                    'block' => 'integer',
-                    'comments' => 'string',
-                );
+            'campaignId' => 'integer',
+            'advertiserId' => 'integer',
+            'campaignName' => 'string',
+            'startDate' => 'date',
+            'endDate' => 'date',
+            'impressions' => 'integer',
+            'clicks' => 'integer',
+            'priority' => 'integer',
+            'weight' => 'integer',
+            'targetImpressions' => 'integer',
+            'targetClicks' => 'integer',
+            'targetConversions' => 'integer',
+            'revenue' => 'double',
+            'revenueType' => 'integer',
+            'capping' => 'integer',
+            'sessionCapping' => 'integer',
+            'block' => 'integer',
+            'comments' => 'string',
+        );
     }
 }
-
-?>

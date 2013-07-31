@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -11,12 +10,11 @@
 */
 
 /**
- * @package    OpenX
+ * @package    OpenXApiClient
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the XmlRpcUtils class.
- *
  */
 namespace OpenXApiClient;
 
@@ -25,7 +23,6 @@ require_once 'XML/RPC/Server.php';
 
 /**
  * The XmlRpcUtils class contains various XmlRpc methods.
- *
  */
 class XmlRpcUtils
 {
@@ -36,19 +33,18 @@ class XmlRpcUtils
      * @param object &$oInfoObject
      * @return XML_RPC_Value
      */
-    function getEntityWithNotNullFields(&$oInfoObject)
+    public function getEntityWithNotNullFields(&$oInfoObject)
     {
         $aInfoData = $oInfoObject->toArray();
         $aReturnData = array();
 
         foreach ($aInfoData as $fieldName => $fieldValue) {
             if (!is_null($fieldValue)) {
-                $aReturnData[$fieldName] = XmlRpcUtils::_setRPCTypeForField(
-                            $oInfoObject->getFieldType($fieldName), $fieldValue);
+                //$aReturnData[$fieldName] = XmlRpcUtils::_setRPCTypeForField($oInfoObject->getFieldType($fieldName), $fieldValue);
+                $aReturnData[$fieldName] = $this->setRPCTypeForField($oInfoObject->getFieldType($fieldName), $fieldValue);
             }
         }
-        return new XML_RPC_Value($aReturnData,
-                                            $GLOBALS['XML_RPC_Struct']);
+        return new XML_RPC_Value($aReturnData, $GLOBALS['XML_RPC_Struct']);
     }
 
     /**
@@ -58,7 +54,7 @@ class XmlRpcUtils
      * @param mixed $variable
      * @return XML_RPC_Value or false
      */
-    function _setRPCTypeForField($type, $variable)
+    private function setRPCTypeForField($type, $variable)
     {
         switch ($type) {
             case 'string':
@@ -86,7 +82,8 @@ class XmlRpcUtils
             case 'custom':
                 return $variable;
         }
-        die('Unsupported Xml Rpc type \'' . $type . '\'');
+        //@todo: Change this to specific custom exception
+        throw new \InvalidArgumentException("Unsupported Xml Rpc type $type.");
     }
 
 }

@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -11,78 +10,72 @@
 */
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the AgencyInfo class.
- *
  */
 namespace OpenXApiClient;
 
-// Require the base info class.
-require_once 'Info.php';
+use Info;
 
 /**
  *  The agencyInfo class extends the base Info class and contains information about the agency.
- *
  */
-
-class OA_Dll_AgencyInfo extends OA_Info
+class AgencyInfo extends Info
 {
     /**
      * The agencyID variable is the unique ID for the agency.
      *
      * @var integer $agencyId
      */
-    var $agencyId;
+    protected $agencyId;
 
     /**
      * This field contains the ID of the agency account.
      *
      * @var integer $accountId
      */
-    var $accountId;
+    protected $accountId;
 
     /**
      * The agencycName variable is the name of the agency.
      *
      * @var string $agencyName
      */
-    var $agencyName;
+    protected $agencyName;
 
     /**
      * The password variable is the password for the agency.
      *
      * @var string $password
      */
-    var $password;
+    protected $password;
 
     /**
      * The contactName variable is the name of the contact for the agency.
      *
      * @var string $contactName
      */
-    var $contactName;
+    protected $contactName;
 
     /**
      * The emailAddress variable is the email address for the agency contact.
      *
      * @var string $emailAddress
      */
-    var $emailAddress;
+    protected $emailAddress;
 
-    function getFieldsTypes()
+    public function getFieldsTypes()
     {
         return array(
-                    'agencyId' => 'integer',
-                    'accountId' => 'integer',
-                    'agencyName' => 'string',
-                    'contactName' => 'string',
-                    'password' => 'string',
-                    'emailAddress' => 'string'
-                );
+            'agencyId' => 'integer',
+            'accountId' => 'integer',
+            'agencyName' => 'string',
+            'contactName' => 'string',
+            'password' => 'string',
+            'emailAddress' => 'string'
+        );
     }
 }
-
-?>

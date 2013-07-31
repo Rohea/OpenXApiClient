@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -11,24 +10,20 @@
 */
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Heiko Weber <heiko@wecos.de>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the ChannelInfo class.
- *
  */
 namespace OpenXApiClient;
 
-// Require the base info class.
-require_once 'Info.php';
+use Info;
 
 /**
  *  The channelInfo class extends the base Info class and contains information about the channel.
- *
  */
-
-class OA_Dll_ChannelInfo extends OA_Info
+class ChannelInfo extends Info
 {
 
     /**
@@ -36,49 +31,47 @@ class OA_Dll_ChannelInfo extends OA_Info
      *
      * @var integer $channelId
      */
-    var $channelId;
+    protected $channelId;
 
     /**
      * This field contains the ID of the agency account.
      *
      * @var integer $agencyId
      */
-    var $agencyId;
+    protected $agencyId;
 
     /**
      * This field contains the ID of the publisher.
      *
      * @var integer $websiteId
      */
-    var $websiteId;
+    protected $websiteId;
 
     /**
      * The channelName variable is the name of the channel.
      *
      * @var string $channelName
      */
-    var $channelName;
+    protected $channelName;
 
     /**
      * The description variable is the description for the channel.
      *
      * @var string $description
      */
-    var $description;
+    protected $description;
 
     /**
      * The comments variable is the comment for the channel.
      *
      * @var string $comments
      */
-    var $comments;
+    protected $comments;
 
     /**
      * This method sets all default values when adding a new channel.
-     *
      */
-
-    function getFieldsTypes()
+    public function getFieldsTypes()
     {
         return array(
             'channelId' => 'integer',

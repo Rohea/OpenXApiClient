@@ -1,5 +1,4 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
 | Revive Adserver                                                           |
@@ -11,24 +10,20 @@
 */
 
 /**
- * @package    OpenXDll
+ * @package    OpenXApiClient
  * @author     Ivan Klishch <iklishch@lohika.com>
  * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
  *
  * This file describes the BannerInfo class.
- *
  */
 namespace OpenXApiClient;
 
-// Require the base info class.
-require_once 'Info.php';
+use Info;
 
 /**
  *  The BannerInfo class extends the base Info class and contains information about the banner.
- *
  */
-
-class OA_Dll_BannerInfo extends OA_Info
+class BannerInfo extends Info
 {
 
     /**
@@ -36,112 +31,112 @@ class OA_Dll_BannerInfo extends OA_Info
      *
      * @var integer $bannerId
      */
-    var $bannerId;
+    protected $bannerId;
 
     /**
      * The campaignID variable is the ID of the campaign associated with the banner.
      *
      * @var integer $campaignId
      */
-    var $campaignId;
+    protected $campaignId;
 
     /**
      * The bannerName variable is the name of the banner.
      *
      * @var integer $bannerName
      */
-    var $bannerName;
+    protected $bannerName;
 
     /**
      * The storageType variable is one of the following: 'sql','web','url','html',,'txt'.
      *
      * @var enum $storageType
      */
-    var $storageType;
+    protected $storageType;
 
     /**
      * The imageURL variable is the URL for an image file for network banners.
      *
      * @var string $imageURL
      */
-    var $imageURL;
+    protected $imageURL;
 
     /**
      * The htmlTemplate variable is the HTML template for HTML banners.
      *
      * @var text $htmlTemplate
      */
-    var $htmlTemplate;
+    protected $htmlTemplate;
 
     /**
      * The width variable contains the width of a banner.
      *
      * @var integer $width
      */
-    var $width;
+    protected $width;
 
     /**
      * The height variable contains the height of the banner.
      *
      * @var integer $height
      */
-    var $height;
+    protected $height;
 
     /**
      * This field provides the priority weight of the banner.
      *
      * @var integer $weight
      */
-    var $weight;
+    protected $weight;
 
     /**
      * This field provides the HTML target of the banner (e.g. _blank, _self)
      *
      * @var text $target
      */
-    var $target;
+    protected $target;
 
     /**
      * The url variable is the destination URL of the banner.
      *
      * @var text $url
      */
-    var $url;
+    protected $url;
 
     /**
      * This field provides the Text value of the text banner.
      *
      * @var string $bannerText
      */
-    var $bannerText;
+    protected $bannerText;
 
     /**
      * A boolean field to indicate if the banner is active
      *
      * @var int $status
      */
-    var $status;
+    protected $status;
 
     /**
      * A text field for HTML banners to indicate which adserver this ad is from
      *
      * @var string $adserver
      */
-    var $adserver;
+    protected $adserver;
 
     /**
      * This field provides transparency information for SWF banners
      *
      * @var boolean
      */
-    var $transparent;
+    protected $transparent;
 
     /**
      * Frequency capping: total views per user.
      *
      * @var integer $capping
      */
-    var $capping;
+    protected $capping;
 
     /**
      * Frequency capping: total views per period.
@@ -149,14 +144,14 @@ class OA_Dll_BannerInfo extends OA_Info
      *
      * @var integer $sessionCapping
      */
-    var $sessionCapping;
+    protected $sessionCapping;
 
     /**
      * Frequency capping: reset period, in seconds.
      *
      * @var integer $block
      */
-    var $block;
+    protected $block;
 
     /**
      * An array field for SQL/Web banners to contain the image name and binary data
@@ -173,7 +168,7 @@ class OA_Dll_BannerInfo extends OA_Info
      *
      * @var array
      */
-    var $aImage;
+    protected $aImage;
 
     /**
      * An array field for SQL/Web banners to contain the backup image name and binary data
@@ -187,36 +182,34 @@ class OA_Dll_BannerInfo extends OA_Info
      *
      * @var array
      */
-    var $aBackupImage;
+    protected $aBackupImage;
 
     /**
      * This field provides any additional comments to be stored.
      *
      * @var string $comments
      */
-    var $comments;
+    protected $comments;
 
     /**
      * This field provides the alt value for SQL/Web/External banners.
      *
      * @var string $alt
      */
-    var $alt;
+    protected $alt;
 
     /**
      * This field provides the filename of the banner.
      *
      * @var string $alt
      */
-    var $filename;
+    protected $filename;
 
     /**
      * This method sets all default values when adding a new banner.
-     *
-     * @access public
-     *
      */
-    function setDefaultForAdd() {
+    public function setDefaultForAdd()
+    {
         if (is_null($this->storageType)) {
             $this->storageType = 'sql';
         }
@@ -254,7 +247,7 @@ class OA_Dll_BannerInfo extends OA_Info
         }
     }
 
-    function encodeImage($aImage)
+    public function encodeImage($aImage)
     {
         return new XML_RPC_Value(array(
             'filename' => new XML_RPC_Value($aImage['filename']),
@@ -263,7 +256,7 @@ class OA_Dll_BannerInfo extends OA_Info
         ), 'struct');
     }
 
-    function toArray()
+    public function toArray()
     {
         $aInfo = parent::toArray();
         if (isset($this->aImage)) {
@@ -278,40 +271,36 @@ class OA_Dll_BannerInfo extends OA_Info
     /**
      * This method returns an array of fields with their corresponding types.
      *
-     * @access public
-     *
      * @return array
      */
-    function getFieldsTypes()
+    public function getFieldsTypes()
     {
         return array(
-                    'bannerId' => 'integer',
-                    'campaignId' => 'integer',
-                    'bannerName' => 'string',
-                    'storageType' => 'string',
-                    'imageURL' => 'string',
-                    'htmlTemplate' => 'string',
-                    'width' => 'integer',
-                    'height' => 'integer',
-                    'weight' => 'integer',
-                    'target' => 'string',
-                    'url' => 'string',
-                    'bannerText' => 'string',
-                    'status' => 'integer',
-                    'adserver' => 'string',
-                    'transparent' => 'integer',
-                    'capping' => 'integer',
-                    'sessionCapping' => 'integer',
-                    'block' => 'integer',
-                    'aImage' => 'custom',
-                    'aBackupImage' => 'custom',
-                    'comments' => 'string',
-                    'alt' => 'string',
-                    'filename' => 'string',
-                    'append' => 'string',
-                    'prepend' => 'string',
-                );
+            'bannerId' => 'integer',
+            'campaignId' => 'integer',
+            'bannerName' => 'string',
+            'storageType' => 'string',
+            'imageURL' => 'string',
+            'htmlTemplate' => 'string',
+            'width' => 'integer',
+            'height' => 'integer',
+            'weight' => 'integer',
+            'target' => 'string',
+            'url' => 'string',
+            'bannerText' => 'string',
+            'status' => 'integer',
+            'adserver' => 'string',
+            'transparent' => 'integer',
+            'capping' => 'integer',
+            'sessionCapping' => 'integer',
+            'block' => 'integer',
+            'aImage' => 'custom',
+            'aBackupImage' => 'custom',
+            'comments' => 'string',
+            'alt' => 'string',
+            'filename' => 'string',
+            'append' => 'string',
+            'prepend' => 'string',
+        );
     }
 }
-
-?>
