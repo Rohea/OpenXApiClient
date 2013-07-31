@@ -1,0 +1,41 @@
+{
+    "name":         "rohea/openx-api-client",
+    "type":         "library",
+    "description":  "XML-RPC API client version 2 for OpenX ad server",
+    "keywords":     ["OpenX", "XML-RPC", "API", "client"],
+    "minimum-stability": "dev",
+    "homepage":     "https://github.com/Rohea/OpenXApiClient",
+    "license":      "GPLv2",
+    "authors": [
+        {
+            "name": "Chris Nutting",
+            "email": "Chris.Nutting@openx.org"
+        },
+        {
+            "name": "Matteo Beccati",
+            "email": "matteo.beccati@openx.org"
+        },
+        {
+            "name": "Ivan Klishch",
+            "email": "iklishch@lohika.com"
+        },
+        {
+            "name": "Andriy Petlyovanyy",
+            "email": "apetlyovanyy@lohika.com"
+        },
+        {
+            "name": "Heiko Weber",
+            "email": "heiko@wecos.de"
+        },
+        {
+            "name": "Tomi Saarinen",
+            "email": "tomi.saarinen@rohea.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.3.2"
+    },
+    "autoload": {
+        "psr-0": { "OpenXApiClient": "lib/" }
+    }
+}
