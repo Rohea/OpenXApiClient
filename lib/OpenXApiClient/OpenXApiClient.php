@@ -74,13 +74,7 @@ class OpenXApiClient
     public function __construct(Client $client, $username, $password)
     {
         $this->client = $client;
-        /*
-        $this->host = $host;
-        $this->basepath = $basepath;
-        $this->port = $port;
-        $this->ssl  = $ssl;
-        $this->timeout = $timeout;
-        */
+        //Login and set sessionId
         $this->logon($username, $password);
     }
 
@@ -150,7 +144,7 @@ class OpenXApiClient
     private function logon($username, $password)
     {
         $this->sessionId = $this->send('ox.logon', array($username, $password));
-        
+
         return true;
     }
 
