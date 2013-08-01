@@ -27,23 +27,23 @@ abstract class Info
 
     public function getFieldType($fieldName)
     {
-        $aFieldsTypes = $this->getFieldsTypes();
-        if (!isset($aFieldsTypes) || !is_array($aFieldsTypes)) {
+        $fieldTypes = $this->getFieldsTypes();
+        if (!isset($fieldTypes) || !is_array($fieldTypes)) {
             throw new \InvalidArgumentException('Please provide field types array for Info object creation');
         }
 
-        if (!array_key_exists($fieldName, $aFieldsTypes)) {
+        if (!array_key_exists($fieldName, $fieldTypes)) {
             throw new \InvalidArgumentException("Unknown type for field $fieldName.");
         }
-        return $aFieldsTypes[$fieldName];
+        return $fieldTypes[$fieldName];
     }
 
-    public function readDataFromArray($aEntityData)
+    public function readDataFromArray(array $entityData)
     {
-        $aFieldsTypes = $this->getFieldsTypes();
-        foreach($aFieldsTypes as $fieldName => $fieldType) {
-            if (array_key_exists($fieldName, $aEntityData)) {
-                $this->$fieldName = $aEntityData[$fieldName];
+        $fieldTypes = $this->getFieldsTypes();
+        foreach($fieldTypes as $fieldName => $fieldType) {
+            if (array_key_exists($fieldName, $entityData)) {
+                $this->$fieldName = $entityData[$fieldName];
             }
         }
     }
