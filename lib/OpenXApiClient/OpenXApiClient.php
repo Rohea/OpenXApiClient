@@ -27,6 +27,9 @@ use TargetingInfo;
 use UserInfo;
 use ZoneInfo;
 
+use fXmlRpc\Client;
+use fXmlRpc\Exception\ResponseException;
+
 /**
  * A library class to provide XML-RPC routines on
  * a web server to enable it to manipulate objects in OpenX using the web services API.
@@ -38,13 +41,15 @@ use ZoneInfo;
 class OpenXApiClient
 {
 
+    /*
     protected $host;
     protected $basepath;
     protected $port;
     protected $ssl;
     protected $timeout;
-    protected $username;
-    protected $password;
+    */
+    //protected $username;
+    //protected $password;
     /**
      * The sessionId is set by the logon() method called during the constructor.
      *
@@ -62,8 +67,31 @@ class OpenXApiClient
      */
     protected $debug = '';
 
+    private $client;
+
     /**
      * Constructor
+     *
+     * @param Client $client    Fully prepared fXmlRpc client instance
+     * @param string $username  The username to authenticate to the web services API.
+     * @param string $password  The password for this user.
+     */
+    public function __construct(Client $client, $username, $password)
+    {
+        $this->client = $client;
+        /*
+        $this->host = $host;
+        $this->basepath = $basepath;
+        $this->port = $port;
+        $this->ssl  = $ssl;
+        $this->timeout = $timeout;
+        */
+        $this->logon($username, $password);
+    }
+
+
+    /**
+     * Constructor REMOVED.
      *
      * @param string $host      The name of the host to which to connect.
      * @param string $basepath  The base path to XML-RPC services.
@@ -74,6 +102,7 @@ class OpenXApiClient
      * @param bool   $ssl       Set to true to connect using an SSL connection.
      * @param int    $timeout   The timeout period to wait for a response.
      */
+    /*
     public function __construct($host, $basepath, $username, $password, $port = 0, $ssl = false, $timeout = 15)
     {
         $this->host = $host;
@@ -85,17 +114,7 @@ class OpenXApiClient
         $this->password = $password;
         $this->logon();
     }
-
-    /**
-     * A private method to return an XML_RPC_Client to the API service
-     *
-     * @return XML_RPC_Client
-     */
-    private function getClient()
-    {
-        $oClient = &new XML_RPC_Client($this->basepath . '/' . $this->debug, $this->host);
-        return $oClient;
-    }
+    */
 
     /**
      * This private function sends a method call and $data to a specified service and automatically
@@ -119,29 +138,37 @@ class OpenXApiClient
      */
     private function send($method, $data)
     {
+        /*
         $dataMessage = array();
         foreach ($data as $element) {
-            if (is_object($element) && is_subclass_of($element, 'OA_Info')) {
+            if (is_object($element) && ($element instanceof Info)) {
                 $dataMessage[] = XmlRpcUtils::getEntityWithNotNullFields($element);
             } else {
                 $dataMessage[] = XML_RPC_encode($element);
             }
         }
+        */
+        /*
         $message = new XML_RPC_Message($method, $dataMessage);
-
-        $client = $this->getClient();
-
+        */
         // Send the XML-RPC message to the server.
-        $response = $client->send($message, $this->timeout, $this->ssl ? 'https' : 'http');
-
+        //$response = $this->client->send($message, $this->timeout, $this->ssl ? 'https' : 'http');
+        try {
+            $response = $this->client->call($method, $data);
+        } catch (ResponseException $e) {
+            //Do something smarter?
+            throw $e;
+        }
         // Check for an error response.
+        /*
         if ($response && $response->faultCode() == 0) {
             $result = XML_RPC_decode($response->value());
         } else {
             trigger_error('XML-RPC Error (' . $response->faultCode() . '): ' . $response->faultString() .
                 ' in method ' . $method . '()', E_USER_ERROR);
         }
-        return $result;
+        */
+        return $response;
     }
 
     /**
@@ -149,9 +176,9 @@ class OpenXApiClient
      *
      * @return boolean "Was the remote logon() call successful?"
      */
-    private function logon()
+    private function logon($username, $password)
     {
-        $this->sessionId = $this->send('ox.logon', array($this->username, $this->password));
+        $this->sessionId = $this->send('ox.logon', array($username, $password));
         return true;
     }
 

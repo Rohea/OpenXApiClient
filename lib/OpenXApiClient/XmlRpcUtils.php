@@ -35,7 +35,7 @@ class XmlRpcUtils
      * @param object &$oInfoObject
      * @return XML_RPC_Value
      */
-    public function getEntityWithNotNullFields(&$oInfoObject)
+    public static function getEntityWithNotNullFields(&$oInfoObject)
     {
         $aInfoData = $oInfoObject->toArray();
         $aReturnData = array();
