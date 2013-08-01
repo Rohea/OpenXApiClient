@@ -274,8 +274,8 @@ class OpenXApiClient
      * This method returns the daily statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function agencyDailyStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -294,8 +294,8 @@ class OpenXApiClient
      * This method returns the advertiser statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function agencyAdvertiserStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -307,8 +307,8 @@ class OpenXApiClient
      * This method returns the campaign statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function agencyCampaignStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -320,8 +320,8 @@ class OpenXApiClient
      * This method returns the banner statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function agencyBannerStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -333,8 +333,8 @@ class OpenXApiClient
      * This method returns the publisher statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function agencyPublisherStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -346,8 +346,8 @@ class OpenXApiClient
      * This method returns the zone statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function agencyZoneStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -430,8 +430,8 @@ class OpenXApiClient
      * This method returns daily statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function advertiserDailyStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -450,8 +450,8 @@ class OpenXApiClient
      * This method returns campaign statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function advertiserCampaignStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -463,8 +463,8 @@ class OpenXApiClient
      * This method returns banner statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function advertiserBannerStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -476,8 +476,8 @@ class OpenXApiClient
      * This method returns publisher statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function advertiserPublisherStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -489,8 +489,8 @@ class OpenXApiClient
      * This method returns zone statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function advertiserZoneStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -573,8 +573,8 @@ class OpenXApiClient
      * This method returns daily statistics for a campaign for a specified period.
      *
      * @param int $campaignId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function campaignDailyStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -586,8 +586,8 @@ class OpenXApiClient
      * This method returns banner statistics for a campaign for a specified period.
      *
      * @param int $campaignId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function campaignBannerStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -599,8 +599,8 @@ class OpenXApiClient
      * This method returns publisher statistics for a campaign for a specified period.
      *
      * @param int $campaignId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function campaignPublisherStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -612,8 +612,8 @@ class OpenXApiClient
      * This method returns zone statistics for a campaign for a specified period.
      *
      * @param int $campaignId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function campaignZoneStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -733,8 +733,8 @@ class OpenXApiClient
      * This method returns daily statistics for a banner for a specified period.
      *
      * @param int $bannerId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function bannerDailyStatistics($bannerId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -753,8 +753,8 @@ class OpenXApiClient
      * This method returns publisher statistics for a banner for a specified period.
      *
      * @param int $bannerId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function bannerPublisherStatistics($bannerId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -767,8 +767,8 @@ class OpenXApiClient
      * This method returns zone statistics for a banner for a specified period.
      *
      * @param int $bannerId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function bannerZoneStatistics($bannerId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -848,8 +848,8 @@ class OpenXApiClient
      * This method returns daily statistics for a publisher for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function publisherDailyStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -868,8 +868,8 @@ class OpenXApiClient
      * This method returns zone statistics for a publisher for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function publisherZoneStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -881,8 +881,8 @@ class OpenXApiClient
      * This method returns advertiser statistics for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function publisherAdvertiserStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -894,8 +894,8 @@ class OpenXApiClient
      * This method returns campaign statistics for a publisher for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function publisherCampaignStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -907,8 +907,8 @@ class OpenXApiClient
      * This method returns banner statistics for a publisher for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function publisherBannerStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -1079,8 +1079,8 @@ class OpenXApiClient
      * This method returns daily statistics for a zone for a specified period.
      *
      * @param int $zoneId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function zoneDailyStatistics($zoneId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -1099,8 +1099,8 @@ class OpenXApiClient
      * This method returns advertiser statistics for a zone for a specified period.
      *
      * @param int $zoneId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function zoneAdvertiserStatistics($zoneId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -1112,8 +1112,8 @@ class OpenXApiClient
      * This method returns campaign statistics for a zone for a specified period.
      *
      * @param int $zoneId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function zoneCampaignStatistics($zoneId, $startDate = null, $endDate = null, $useManagerTimezone = false)
@@ -1125,8 +1125,8 @@ class OpenXApiClient
      * This method returns publisher statistics for a zone for a specified period.
      *
      * @param int $zoneId
-     * @param Pear::Date $startDate
-     * @param Pear::Date $endDate
+     * @param DateTime $startDate
+     * @param DateTime $endDate
      * @return array  result data
      */
     public function zoneBannerStatistics($zoneId, $startDate = null, $endDate = null, $useManagerTimezone = false)
