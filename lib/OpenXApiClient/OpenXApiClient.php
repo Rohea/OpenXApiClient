@@ -84,7 +84,6 @@ class OpenXApiClient
         $this->logon($username, $password);
     }
 
-
     /**
      * Constructor REMOVED.
      *
