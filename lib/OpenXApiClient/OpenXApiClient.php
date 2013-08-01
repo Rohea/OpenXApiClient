@@ -138,15 +138,7 @@ class OpenXApiClient
             //Do something smarter?
             throw $e;
         }
-        // Check for an error response.
-        /*
-        if ($response && $response->faultCode() == 0) {
-            $result = XML_RPC_decode($response->value());
-        } else {
-            trigger_error('XML-RPC Error (' . $response->faultCode() . '): ' . $response->faultString() .
-                ' in method ' . $method . '()', E_USER_ERROR);
-        }
-        */
+
         return $response;
     }
 
@@ -158,6 +150,7 @@ class OpenXApiClient
     private function logon($username, $password)
     {
         $this->sessionId = $this->send('ox.logon', array($username, $password));
+        
         return true;
     }
 
