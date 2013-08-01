@@ -43,11 +43,7 @@ abstract class Info
         $aFieldsTypes = $this->getFieldsTypes();
         foreach($aFieldsTypes as $fieldName => $fieldType) {
             if (array_key_exists($fieldName, $aEntityData)) {
-                if ($fieldType == 'date') {
-                    $this->$fieldName = new \DateTime($aEntityData[$fieldName]);
-                } else {
-                    $this->$fieldName = $aEntityData[$fieldName];
-                }
+                $this->$fieldName = $aEntityData[$fieldName];
             }
         }
     }

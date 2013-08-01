@@ -16,7 +16,7 @@
  */
 namespace OpenXApiClient;
 
-use Info;
+use OpenXApiClient\Info;
 
 /**
  * The OA_Dll_UserInfo class extends the base OA_Info class and

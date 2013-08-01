@@ -8,27 +8,22 @@
 | License: GPLv2 or later, see the LICENSE.txt file.                        |
 +---------------------------------------------------------------------------+
 */
-/*
-if (!@include('XML/RPC.php')) {
-    die('Error: cannot load the PEAR XML_RPC class');
-}
-*/
 namespace OpenXApiClient;
 
-//require_once 'XmlRpcUtils.php';
-
 // Include the info-object files
-use AdvertiserInfo;
-use AgencyInfo;
-use BannerInfo;
-use CampaignInfo;
-use PublisherInfo;
-use TargetingInfo;
-use UserInfo;
-use ZoneInfo;
+use OpenXApiClient\AdvertiserInfo;
+use OpenXApiClient\AgencyInfo;
+use OpenXApiClient\BannerInfo;
+use OpenXApiClient\CampaignInfo;
+use OpenXApiClient\PublisherInfo;
+use OpenXApiClient\TargetingInfo;
+use OpenXApiClient\UserInfo;
+use OpenXApiClient\ZoneInfo;
 
 use fXmlRpc\Client;
 use fXmlRpc\Exception\ResponseException;
+
+use \DateTime;
 
 /**
  * A library class to provide XML-RPC routines on
@@ -47,9 +42,9 @@ class OpenXApiClient
     protected $port;
     protected $ssl;
     protected $timeout;
+    protected $username;
+    protected $password;
     */
-    //protected $username;
-    //protected $password;
     /**
      * The sessionId is set by the logon() method called during the constructor.
      *
@@ -138,21 +133,6 @@ class OpenXApiClient
      */
     private function send($method, $data)
     {
-        /*
-        $dataMessage = array();
-        foreach ($data as $element) {
-            if (is_object($element) && ($element instanceof Info)) {
-                $dataMessage[] = XmlRpcUtils::getEntityWithNotNullFields($element);
-            } else {
-                $dataMessage[] = XML_RPC_encode($element);
-            }
-        }
-        */
-        /*
-        $message = new XML_RPC_Message($method, $dataMessage);
-        */
-        // Send the XML-RPC message to the server.
-        //$response = $this->client->send($message, $this->timeout, $this->ssl ? 'https' : 'http');
         try {
             $response = $this->client->call($method, $data);
         } catch (ResponseException $e) {
@@ -197,22 +177,26 @@ class OpenXApiClient
      *
      * @param string  $methodName
      * @param int  $entityId
-     * @param Pear::Date  $oStartDate
-     * @param Pear::Date  $oEndDate
+     * @param DateTime  $startDate
+     * @param DateTime  $endDate
      * @return array  result data
      */
-    private function callStatisticsMethod($methodName, $entityId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    private function callStatisticsMethod($methodName, $entityId, DateTime $startDate = null, DateTime $endDate = null, $useManagerTimezone = false)
     {
-        $dataArray = array((int) $entityId);
-        if (is_object($oStartDate)) {
-            $dataArray[] = XML_RPC_iso8601_encode($oStartDate->getDate(DATE_FORMAT_UNIXTIME));
-
-            if (is_object($oEndDate)) {
-                $dataArray[] = XML_RPC_iso8601_encode($oEndDate->getDate(DATE_FORMAT_UNIXTIME));
-            }
+        if (! isset($startDate)) {
+            $startDate =  new DateTime('1970-01-01 00:00:00');
+        }
+        if (! isset($endDate)) {
+            $endDate = new DateTime();
         }
 
-        $dataArray[] = (bool) $useManagerTimezone;
+        $dataArray = array(
+            (int) $entityId,
+            $startDate,
+            $endDate,
+            (bool) $useManagerTimezone,
+        );
+
         $statisticsData = $this->sendWithSession($methodName, $dataArray);
 
         return $statisticsData;
@@ -222,55 +206,55 @@ class OpenXApiClient
      * This method sends a call to the AgencyXmlRpcService and
      * passes the AgencyInfo with the session to add an agency.
      *
-     * @param OA_Dll_AgencyInfo $oAgencyInfo
+     * @param AgencyInfo $agencyInfo
      * @return  method result
      */
-    public function addAgency(&$oAgencyInfo)
+    public function addAgency($agencyInfo)
     {
-        return (int) $this->sendWithSession('ox.addAgency', array(&$oAgencyInfo));
+        return (int) $this->sendWithSession('ox.addAgency', array($agencyInfo));
     }
 
     /**
      * This method sends a call to the AgencyXmlRpcService and
      * passes the AgencyInfo object with the session to modify an agency.
      *
-     * @param OA_Dll_AgencyInfo $oAgencyInfo
+     * @param AgencyInfo $agencyInfo
      * @return  method result
      */
-    public function modifyAgency(&$oAgencyInfo)
+    public function modifyAgency($agencyInfo)
     {
-        return (bool) $this->sendWithSession('ox.modifyAgency', array(&$oAgencyInfo));
+        return (bool) $this->sendWithSession('ox.modifyAgency', array($agencyInfo));
     }
 
     /**
      * This method  returns the AgencyInfo for a specified agency.
      *
      * @param int $agencyId
-     * @return OA_Dll_AgencyInfo
+     * @return AgencyInfo
      */
     public function getAgency($agencyId)
     {
         $dataAgency = $this->sendWithSession('ox.getAgency', array((int) $agencyId));
-        $oAgencyInfo = new OA_Dll_AgencyInfo();
-        $oAgencyInfo->readDataFromArray($dataAgency);
+        $agencyInfo = new AgencyInfo();
+        $agencyInfo->readDataFromArray($dataAgency);
 
-        return $oAgencyInfo;
+        return $agencyInfo;
     }
 
     /**
      * This method returns AgencyInfo for all agencies.
      *
      * @param int $agencyId
-     * @return array  array OA_Dll_AgencyInfo objects
+     * @return array  array AgencyInfo objects
      */
     public function getAgencyList()
     {
         $dataAgencyList = $this->sendWithSession('ox.getAgencyList');
         $returnData = array();
         foreach ($dataAgencyList as $dataAgency) {
-            $oAgencyInfo = new OA_Dll_AgencyInfo();
-            $oAgencyInfo->readDataFromArray($dataAgency);
-            $returnData[] = $oAgencyInfo;
+            $agencyInfo = new AgencyInfo();
+            $agencyInfo->readDataFromArray($dataAgency);
+            $returnData[] = $agencyInfo;
         }
 
         return $returnData;
@@ -291,13 +275,13 @@ class OpenXApiClient
      * This method returns the daily statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function agencyDailyStatistics($agencyId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function agencyDailyStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        $statisticsData = $this->callStatisticsMethod('ox.agencyDailyStatistics', $agencyId, $oStartDate, $oEndDate, $useManagerTimezone);
+        $statisticsData = $this->callStatisticsMethod('ox.agencyDailyStatistics', $agencyId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
             $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
@@ -311,89 +295,89 @@ class OpenXApiClient
      * This method returns the advertiser statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function agencyAdvertiserStatistics($agencyId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function agencyAdvertiserStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.agencyAdvertiserStatistics', $agencyId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.agencyAdvertiserStatistics', $agencyId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns the campaign statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function agencyCampaignStatistics($agencyId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function agencyCampaignStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.agencyCampaignStatistics', $agencyId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.agencyCampaignStatistics', $agencyId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns the banner statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function agencyBannerStatistics($agencyId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function agencyBannerStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.agencyBannerStatistics', $agencyId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.agencyBannerStatistics', $agencyId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns the publisher statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function agencyPublisherStatistics($agencyId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function agencyPublisherStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.agencyPublisherStatistics', $agencyId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.agencyPublisherStatistics', $agencyId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns the zone statistics for an agency for a specified time period.
      *
      * @param int $agencyId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function agencyZoneStatistics($agencyId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function agencyZoneStatistics($agencyId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.agencyZoneStatistics', $agencyId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.agencyZoneStatistics', $agencyId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method adds an advertiser.
      *
-     * @param OA_Dll_AdvertiserInfo $oAdvertiserInfo
+     * @param AdvertiserInfo $advertiserInfo
      *
      * @return  method result
      */
-    public function addAdvertiser(&$oAdvertiserInfo)
+    public function addAdvertiser($advertiserInfo)
     {
-        return (int) $this->sendWithSession('ox.addAdvertiser', array(&$oAdvertiserInfo));
+        return (int) $this->sendWithSession('ox.addAdvertiser', array($advertiserInfo));
     }
 
     /**
      * This method modifies an advertiser.
      *
-     * @param OA_Dll_AdvertiserInfo $oAdvertiserInfo
+     * @param AdvertiserInfo $advertiserInfo
      *
      * @return  method result
      */
-    public function modifyAdvertiser(&$oAdvertiserInfo)
+    public function modifyAdvertiser($advertiserInfo)
     {
-        return (bool) $this->sendWithSession('ox.modifyAdvertiser', array(&$oAdvertiserInfo));
+        return (bool) $this->sendWithSession('ox.modifyAdvertiser', array($advertiserInfo));
     }
 
     /**
@@ -401,15 +385,15 @@ class OpenXApiClient
      *
      * @param int $advertiserId
      *
-     * @return OA_Dll_AdvertiserInfo
+     * @return AdvertiserInfo
      */
     public function getAdvertiser($advertiserId)
     {
         $dataAdvertiser = $this->sendWithSession('ox.getAdvertiser', array((int) $advertiserId));
-        $oAdvertiserInfo = new OA_Dll_AdvertiserInfo();
-        $oAdvertiserInfo->readDataFromArray($dataAdvertiser);
+        $advertiserInfo = new AdvertiserInfo();
+        $advertiserInfo->readDataFromArray($dataAdvertiser);
 
-        return $oAdvertiserInfo;
+        return $advertiserInfo;
     }
 
     /**
@@ -417,16 +401,16 @@ class OpenXApiClient
      *
      * @param int $agencyId
      *
-     * @return array  array OA_Dll_AgencyInfo objects
+     * @return array  array AgencyInfo objects
      */
     public function getAdvertiserListByAgencyId($agencyId)
     {
         $dataAdvertiserList = $this->sendWithSession('ox.getAdvertiserListByAgencyId', array((int) $agencyId));
         $returnData = array();
         foreach ($dataAdvertiserList as $dataAdvertiser) {
-            $oAdvertiserInfo = new OA_Dll_AdvertiserInfo();
-            $oAdvertiserInfo->readDataFromArray($dataAdvertiser);
-            $returnData[] = $oAdvertiserInfo;
+            $advertiserInfo = new AdvertiserInfo();
+            $advertiserInfo->readDataFromArray($dataAdvertiser);
+            $returnData[] = $advertiserInfo;
         }
 
         return $returnData;
@@ -447,13 +431,13 @@ class OpenXApiClient
      * This method returns daily statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function advertiserDailyStatistics($advertiserId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function advertiserDailyStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        $statisticsData = $this->callStatisticsMethod('ox.advertiserDailyStatistics', $advertiserId, $oStartDate, $oEndDate, $useManagerTimezone);
+        $statisticsData = $this->callStatisticsMethod('ox.advertiserDailyStatistics', $advertiserId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
             $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
@@ -467,76 +451,76 @@ class OpenXApiClient
      * This method returns campaign statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function advertiserCampaignStatistics($advertiserId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function advertiserCampaignStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.advertiserCampaignStatistics', $advertiserId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.advertiserCampaignStatistics', $advertiserId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns banner statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function advertiserBannerStatistics($advertiserId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function advertiserBannerStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.advertiserBannerStatistics', $advertiserId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.advertiserBannerStatistics', $advertiserId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns publisher statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function advertiserPublisherStatistics($advertiserId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function advertiserPublisherStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.advertiserPublisherStatistics', $advertiserId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.advertiserPublisherStatistics', $advertiserId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns zone statistics for an advertiser for a specified period.
      *
      * @param int $advertiserId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function advertiserZoneStatistics($advertiserId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function advertiserZoneStatistics($advertiserId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.advertiserZoneStatistics', $advertiserId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.advertiserZoneStatistics', $advertiserId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method adds a campaign to the campaign object.
      *
-     * @param OA_Dll_CampaignInfo $oCampaignInfo
+     * @param CampaignInfo $campaignInfo
      *
      * @return  method result
      */
-    public function addCampaign(&$oCampaignInfo)
+    public function addCampaign($campaignInfo)
     {
-        return (int) $this->sendWithSession('ox.addCampaign', array(&$oCampaignInfo));
+        return (int) $this->sendWithSession('ox.addCampaign', array($campaignInfo));
     }
 
     /**
      * This method modifies a campaign.
      *
-     * @param OA_Dll_CampaignInfo $oCampaignInfo
+     * @param CampaignInfo $campaignInfo
      *
      * @return  method result
      */
-    public function modifyCampaign(&$oCampaignInfo)
+    public function modifyCampaign($campaignInfo)
     {
-        return (bool) $this->sendWithSession('ox.modifyCampaign', array(&$oCampaignInfo));
+        return (bool) $this->sendWithSession('ox.modifyCampaign', array($campaignInfo));
     }
 
     /**
@@ -544,15 +528,16 @@ class OpenXApiClient
      *
      * @param int $campaignId
      *
-     * @return OA_Dll_CampaignInfo
+     * @return CampaignInfo
      */
     public function getCampaign($campaignId)
     {
         $dataCampaign = $this->sendWithSession('ox.getCampaign', array((int) $campaignId));
-        $oCampaignInfo = new OA_Dll_CampaignInfo();
-        $oCampaignInfo->readDataFromArray($dataCampaign);
 
-        return $oCampaignInfo;
+        $campaignInfo = new CampaignInfo();
+        $campaignInfo->readDataFromArray($dataCampaign);
+
+        return $campaignInfo;
     }
 
     /**
@@ -560,16 +545,16 @@ class OpenXApiClient
      *
      * @param int $campaignId
      *
-     * @return array  array OA_Dll_CampaignInfo objects
+     * @return array  array CampaignInfo objects
      */
     public function getCampaignListByAdvertiserId($advertiserId)
     {
         $dataCampaignList = $this->sendWithSession('ox.getCampaignListByAdvertiserId', array((int) $advertiserId));
         $returnData = array();
         foreach ($dataCampaignList as $dataCampaign) {
-            $oCampaignInfo = new OA_Dll_CampaignInfo();
-            $oCampaignInfo->readDataFromArray($dataCampaign);
-            $returnData[] = $oCampaignInfo;
+            $campaignInfo = new CampaignInfo();
+            $campaignInfo->readDataFromArray($dataCampaign);
+            $returnData[] = $campaignInfo;
         }
         return $returnData;
     }
@@ -589,83 +574,76 @@ class OpenXApiClient
      * This method returns daily statistics for a campaign for a specified period.
      *
      * @param int $campaignId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function campaignDailyStatistics($campaignId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function campaignDailyStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        $statisticsData = $this->callStatisticsMethod('ox.campaignDailyStatistics', $campaignId, $oStartDate, $oEndDate, $useManagerTimezone);
-
-        foreach ($statisticsData as $key => $data) {
-            $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
-                                            $data['day']));
-        }
-
-        return $statisticsData;
+        return $this->callStatisticsMethod('ox.campaignDailyStatistics', $campaignId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns banner statistics for a campaign for a specified period.
      *
      * @param int $campaignId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function campaignBannerStatistics($campaignId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function campaignBannerStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.campaignBannerStatistics', $campaignId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.campaignBannerStatistics', $campaignId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns publisher statistics for a campaign for a specified period.
      *
      * @param int $campaignId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function campaignPublisherStatistics($campaignId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function campaignPublisherStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.campaignPublisherStatistics', $campaignId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.campaignPublisherStatistics', $campaignId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns zone statistics for a campaign for a specified period.
      *
      * @param int $campaignId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function campaignZoneStatistics($campaignId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function campaignZoneStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.campaignZoneStatistics', $campaignId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.campaignZoneStatistics', $campaignId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method adds a banner to the banner object.
      *
-     * @param OA_Dll_BannerInfo $oBannerInfo
+     * @param BannerInfo $bannerInfo
      *
      * @return  method result
      */
-    public function addBanner(&$oBannerInfo)
+    public function addBanner($bannerInfo)
     {
-        return (int) $this->sendWithSession('ox.addBanner', array(&$oBannerInfo));
+        return (int) $this->sendWithSession('ox.addBanner', array($bannerInfo));
     }
 
     /**
      * This method modifies a banner.
      *
-     * @param OA_Dll_BannerInfo $oBannerInfo
+     * @param BannerInfo $bannerInfo
      *
      * @return  method result
      */
-    public function modifyBanner(&$oBannerInfo)
+    public function modifyBanner($bannerInfo)
     {
-        return (bool) $this->sendWithSession('ox.modifyBanner', array(&$oBannerInfo));
+        return (bool) $this->sendWithSession('ox.modifyBanner', array($bannerInfo));
     }
 
     /**
@@ -673,15 +651,15 @@ class OpenXApiClient
      *
      * @param int $bannerId
      *
-     * @return OA_Dll_BannerInfo
+     * @return BannerInfo
      */
     public function getBanner($bannerId)
     {
         $dataBanner = $this->sendWithSession('ox.getBanner', array((int) $bannerId));
-        $oBannerInfo = new OA_Dll_BannerInfo();
-        $oBannerInfo->readDataFromArray($dataBanner);
+        $bannerInfo = new BannerInfo();
+        $bannerInfo->readDataFromArray($dataBanner);
 
-        return $oBannerInfo;
+        return $bannerInfo;
     }
 
     /**
@@ -689,16 +667,16 @@ class OpenXApiClient
      *
      * @param int $bannerId
      *
-     * @return OA_Dll_TargetingInfo
+     * @return TargetingInfo
      */
     public function getBannerTargeting($bannerId)
     {
         $dataBannerTargetingList = $this->sendWithSession('ox.getBannerTargeting', array((int) $bannerId));
         $returnData = array();
         foreach ($dataBannerTargetingList as $dataBannerTargeting) {
-            $oBannerTargetingInfo = new OA_Dll_TargetingInfo();
-            $oBannerTargetingInfo->readDataFromArray($dataBannerTargeting);
-            $returnData[] = $oBannerTargetingInfo;
+            $bannerTargetingInfo = new TargetingInfo();
+            $bannerTargetingInfo->readDataFromArray($dataBannerTargeting);
+            $returnData[] = $bannerTargetingInfo;
         }
         return $returnData;
     }
@@ -710,13 +688,13 @@ class OpenXApiClient
      * @param integer $bannerId
      * @param array $aTargeting
      */
-    public function setBannerTargeting($bannerId, &$aTargeting)
+    public function setBannerTargeting($bannerId, $aTargeting)
     {
         $aTargetingInfoObjects = array();
         foreach ($aTargeting as $aTargetingArray) {
-            $oTargetingInfo = new OA_Dll_TargetingInfo();
-            $oTargetingInfo->readDataFromArray($aTargetingArray);
-            $aTargetingInfoObjects[] = $oTargetingInfo;
+            $targetingInfo = new TargetingInfo();
+            $targetingInfo->readDataFromArray($aTargetingArray);
+            $aTargetingInfoObjects[] = $targetingInfo;
         }
         return (bool) $this->sendWithSession('ox.setBannerTargeting', array((int) $bannerId, $aTargetingInfoObjects));
     }
@@ -726,16 +704,16 @@ class OpenXApiClient
      *
      * @param int $banenrId
      *
-     * @return array  array OA_Dll_CampaignInfo objects
+     * @return array  array CampaignInfo objects
      */
     public function getBannerListByCampaignId($campaignId)
     {
         $dataBannerList = $this->sendWithSession('ox.getBannerListByCampaignId', array((int) $campaignId));
         $returnData = array();
         foreach ($dataBannerList as $dataBanner) {
-            $oBannerInfo = new OA_Dll_BannerInfo();
-            $oBannerInfo->readDataFromArray($dataBanner);
-            $returnData[] = $oBannerInfo;
+            $bannerInfo = new BannerInfo();
+            $bannerInfo->readDataFromArray($dataBanner);
+            $returnData[] = $bannerInfo;
         }
 
         return $returnData;
@@ -756,13 +734,13 @@ class OpenXApiClient
      * This method returns daily statistics for a banner for a specified period.
      *
      * @param int $bannerId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function bannerDailyStatistics($bannerId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function bannerDailyStatistics($bannerId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        $statisticsData = $this->callStatisticsMethod('ox.bannerDailyStatistics', $bannerId, $oStartDate, $oEndDate, $useManagerTimezone);
+        $statisticsData = $this->callStatisticsMethod('ox.bannerDailyStatistics', $bannerId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
             $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
@@ -776,13 +754,13 @@ class OpenXApiClient
      * This method returns publisher statistics for a banner for a specified period.
      *
      * @param int $bannerId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function bannerPublisherStatistics($bannerId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function bannerPublisherStatistics($bannerId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.bannerPublisherStatistics', $bannerId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.bannerPublisherStatistics', $bannerId, $startDate, $endDate, $useManagerTimezone);
 
     }
 
@@ -790,67 +768,67 @@ class OpenXApiClient
      * This method returns zone statistics for a banner for a specified period.
      *
      * @param int $bannerId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function bannerZoneStatistics($bannerId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function bannerZoneStatistics($bannerId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.bannerZoneStatistics', $bannerId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.bannerZoneStatistics', $bannerId, $startDate, $endDate, $useManagerTimezone);
 
     }
 
     /**
      * This method adds a publisher to the publisher object.
      *
-     * @param OA_Dll_PublisherInfo $oPublisherInfo
+     * @param PublisherInfo $publisherInfo
      * @return  method result
      */
-    public function addPublisher(&$oPublisherInfo)
+    public function addPublisher($publisherInfo)
     {
-        return (int) $this->sendWithSession('ox.addPublisher', array(&$oPublisherInfo));
+        return (int) $this->sendWithSession('ox.addPublisher', array($publisherInfo));
     }
 
     /**
      * This method modifies a publisher.
      *
-     * @param OA_Dll_PublisherInfo $oPublisherInfo
+     * @param PublisherInfo $publisherInfo
      * @return  method result
      */
-    public function modifyPublisher(&$oPublisherInfo)
+    public function modifyPublisher($publisherInfo)
     {
-        return (bool) $this->sendWithSession('ox.modifyPublisher', array(&$oPublisherInfo));
+        return (bool) $this->sendWithSession('ox.modifyPublisher', array($publisherInfo));
     }
 
     /**
      * This method returns PublisherInfo for a specified publisher.
      *
      * @param int $publisherId
-     * @return OA_Dll_PublisherInfo
+     * @return PublisherInfo
      */
     public function getPublisher($publisherId)
     {
         $dataPublisher = $this->sendWithSession('ox.getPublisher', array((int) $publisherId));
-        $oPublisherInfo = new OA_Dll_PublisherInfo();
-        $oPublisherInfo->readDataFromArray($dataPublisher);
+        $publisherInfo = new PublisherInfo();
+        $publisherInfo->readDataFromArray($dataPublisher);
 
-        return $oPublisherInfo;
+        return $publisherInfo;
     }
 
     /**
      * This method returns a list of publishers for a specified agency.
      *
      * @param int $agencyId
-     * @return array  array OA_Dll_PublisherInfo objects
+     * @return array  array PublisherInfo objects
      */
     public function getPublisherListByAgencyId($agencyId)
     {
         $dataPublisherList = $this->sendWithSession('ox.getPublisherListByAgencyId', array((int) $agencyId));
         $returnData = array();
         foreach ($dataPublisherList as $dataPublisher) {
-            $oPublisherInfo = new OA_Dll_PublisherInfo();
-            $oPublisherInfo->readDataFromArray($dataPublisher);
-            $returnData[] = $oPublisherInfo;
+            $publisherInfo = new PublisherInfo();
+            $publisherInfo->readDataFromArray($dataPublisher);
+            $returnData[] = $publisherInfo;
         }
 
         return $returnData;
@@ -871,13 +849,13 @@ class OpenXApiClient
      * This method returns daily statistics for a publisher for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function publisherDailyStatistics($publisherId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function publisherDailyStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        $statisticsData = $this->callStatisticsMethod('ox.publisherDailyStatistics', $publisherId, $oStartDate, $oEndDate, $useManagerTimezone);
+        $statisticsData = $this->callStatisticsMethod('ox.publisherDailyStatistics', $publisherId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
             $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
@@ -891,89 +869,89 @@ class OpenXApiClient
      * This method returns zone statistics for a publisher for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function publisherZoneStatistics($publisherId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function publisherZoneStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.publisherZoneStatistics', $publisherId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.publisherZoneStatistics', $publisherId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns advertiser statistics for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function publisherAdvertiserStatistics($publisherId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function publisherAdvertiserStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.publisherAdvertiserStatistics', $publisherId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.publisherAdvertiserStatistics', $publisherId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns campaign statistics for a publisher for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function publisherCampaignStatistics($publisherId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function publisherCampaignStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.publisherCampaignStatistics', $publisherId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.publisherCampaignStatistics', $publisherId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns banner statistics for a publisher for a specified period.
      *
      * @param int $publisherId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function publisherBannerStatistics($publisherId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function publisherBannerStatistics($publisherId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.publisherBannerStatistics', $publisherId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.publisherBannerStatistics', $publisherId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method adds a user to the user object.
      *
-     * @param OA_Dll_UserInfo $oUserInfo
+     * @param UserInfo $userInfo
      * @return  method result
      */
-    public function addUser(&$oUserInfo)
+    public function addUser($userInfo)
     {
-        return (int) $this->sendWithSession('ox.addUser', array(&$oUserInfo));
+        return (int) $this->sendWithSession('ox.addUser', array($userInfo));
     }
 
     /**
      * This method modifies a user.
      *
-     * @param OA_Dll_UserInfo $oUserInfo
+     * @param UserInfo $userInfo
      * @return  method result
      */
-    public function modifyUser(&$oUserInfo)
+    public function modifyUser($userInfo)
     {
-        return (bool) $this->sendWithSession('ox.modifyUser', array(&$oUserInfo));
+        return (bool) $this->sendWithSession('ox.modifyUser', array($userInfo));
     }
 
     /**
      * This method returns UserInfo for a specified user.
      *
      * @param int $userId
-     * @return OA_Dll_UserInfo
+     * @return UserInfo
      */
     public function getUser($userId)
     {
         $dataUser = $this->sendWithSession('ox.getUser', array((int) $userId));
-        $oUserInfo = new OA_Dll_UserInfo();
-        $oUserInfo->readDataFromArray($dataUser);
+        $userInfo = new UserInfo();
+        $userInfo->readDataFromArray($dataUser);
 
-        return $oUserInfo;
+        return $userInfo;
     }
 
     /**
@@ -981,16 +959,16 @@ class OpenXApiClient
      *
      * @param int $accountId
      *
-     * @return array  array OA_Dll_UserInfo objects
+     * @return array  array UserInfo objects
      */
     public function getUserListByAccountId($accountId)
     {
         $dataUserList = $this->sendWithSession('ox.getUserListByAccountId', array((int) $accountId));
         $returnData = array();
         foreach ($dataUserList as $dataUser) {
-            $oUserInfo = new OA_Dll_UserInfo();
-            $oUserInfo->readDataFromArray($dataUser);
-            $returnData[] = $oUserInfo;
+            $userInfo = new UserInfo();
+            $userInfo->readDataFromArray($dataUser);
+            $returnData[] = $userInfo;
         }
 
         return $returnData;
@@ -1034,54 +1012,54 @@ class OpenXApiClient
     /**
      * This method adds a zone to the zone object.
      *
-     * @param OA_Dll_ZoneInfo $oZoneInfo
+     * @param ZoneInfo $zoneInfo
      * @return  method result
      */
-    public function addZone(&$oZoneInfo)
+    public function addZone($zoneInfo)
     {
-        return (int) $this->sendWithSession('ox.addZone', array(&$oZoneInfo));
+        return (int) $this->sendWithSession('ox.addZone', array($zoneInfo));
     }
 
     /**
      * This method modifies a zone.
      *
-     * @param OA_Dll_ZoneInfo $oZoneInfo
+     * @param ZoneInfo $zoneInfo
      * @return  method result
      */
-    public function modifyZone(&$oZoneInfo)
+    public function modifyZone($zoneInfo)
     {
-        return (bool) $this->sendWithSession('ox.modifyZone', array(&$oZoneInfo));
+        return (bool) $this->sendWithSession('ox.modifyZone', array($zoneInfo));
     }
 
     /**
      * This method returns ZoneInfo for a specified zone.
      *
      * @param int $zoneId
-     * @return OA_Dll_ZoneInfo
+     * @return ZoneInfo
      */
     public function getZone($zoneId)
     {
         $dataZone = $this->sendWithSession('ox.getZone', array((int) $zoneId));
-        $oZoneInfo = new OA_Dll_ZoneInfo();
-        $oZoneInfo->readDataFromArray($dataZone);
+        $zoneInfo = new ZoneInfo();
+        $zoneInfo->readDataFromArray($dataZone);
 
-        return $oZoneInfo;
+        return $zoneInfo;
     }
 
     /**
      * This method returns a list of zones for a specified publisher.
      *
      * @param int $publisherId
-     * @return array  array OA_Dll_ZoneInfo objects
+     * @return array  array ZoneInfo objects
      */
     public function getZoneListByPublisherId($publisherId)
     {
         $dataZoneList = $this->sendWithSession('ox.getZoneListByPublisherId', array((int) $publisherId));
         $returnData = array();
         foreach ($dataZoneList as $dataZone) {
-            $oZoneInfo = new OA_Dll_ZoneInfo();
-            $oZoneInfo->readDataFromArray($dataZone);
-            $returnData[] = $oZoneInfo;
+            $zoneInfo = new ZoneInfo();
+            $zoneInfo->readDataFromArray($dataZone);
+            $returnData[] = $zoneInfo;
         }
 
         return $returnData;
@@ -1102,13 +1080,13 @@ class OpenXApiClient
      * This method returns daily statistics for a zone for a specified period.
      *
      * @param int $zoneId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function zoneDailyStatistics($zoneId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function zoneDailyStatistics($zoneId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        $statisticsData = $this->callStatisticsMethod('ox.zoneDailyStatistics', $zoneId, $oStartDate, $oEndDate, $useManagerTimezone);
+        $statisticsData = $this->callStatisticsMethod('ox.zoneDailyStatistics', $zoneId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
             $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
@@ -1122,39 +1100,39 @@ class OpenXApiClient
      * This method returns advertiser statistics for a zone for a specified period.
      *
      * @param int $zoneId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function zoneAdvertiserStatistics($zoneId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function zoneAdvertiserStatistics($zoneId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.xzoneAdvertiserStatistics', $zoneId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.xzoneAdvertiserStatistics', $zoneId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns campaign statistics for a zone for a specified period.
      *
      * @param int $zoneId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function zoneCampaignStatistics($zoneId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function zoneCampaignStatistics($zoneId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.zoneCampaignStatistics', $zoneId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.zoneCampaignStatistics', $zoneId, $startDate, $endDate, $useManagerTimezone);
     }
 
     /**
      * This method returns publisher statistics for a zone for a specified period.
      *
      * @param int $zoneId
-     * @param Pear::Date $oStartDate
-     * @param Pear::Date $oEndDate
+     * @param Pear::Date $startDate
+     * @param Pear::Date $endDate
      * @return array  result data
      */
-    public function zoneBannerStatistics($zoneId, $oStartDate = null, $oEndDate = null, $useManagerTimezone = false)
+    public function zoneBannerStatistics($zoneId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.zoneBannerStatistics', $zoneId, $oStartDate, $oEndDate, $useManagerTimezone);
+        return $this->callStatisticsMethod('ox.zoneBannerStatistics', $zoneId, $startDate, $endDate, $useManagerTimezone);
     }
 
     public function linkBanner($zoneId, $bannerId)

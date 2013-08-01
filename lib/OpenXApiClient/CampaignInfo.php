@@ -18,7 +18,7 @@
  */
 namespace OpenXApiClient;
 
-use Info;
+use OpenXApiClient\Info;
 
 /**
  *  The campaignInfo class extends the base Info class and contains information about the campaign.
