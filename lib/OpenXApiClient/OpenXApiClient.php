@@ -74,7 +74,6 @@ class OpenXApiClient
     public function __construct(Client $client, $username, $password)
     {
         $this->client = $client;
-        //Login and set sessionId
         $this->logon($username, $password);
     }
 
