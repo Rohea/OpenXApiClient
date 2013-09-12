@@ -113,7 +113,7 @@ class OpenXApiClient
      */
     private function sendWithSession($method, $data = array())
     {
-        return $this->send($method, array_merge(array($this->sessionId), $data));
+        return $this->send($method, $data, array($this->sessionId));
     }
 
     /**
@@ -123,11 +123,18 @@ class OpenXApiClient
      * @param mixed  $data    The data to send to the web service.
      * @return mixed The response from the server or false in the event of failure.
      */
-    private function send($method, $data)
+    private function send($method, $data, $prepend = array())
     {
         try {
+            $this->client->prependParams($prepend);
+            foreach ($data as &$v) {
+                if ($v instanceof \OpenXApiClient\Info) {
+                    $v = $v->toArray();
+                }
+            }
             $response = $this->client->call($method, $data);
         } catch (ResponseException $e) {
+            var_dump($e);
             //Do something smarter?
             throw $e;
         }
