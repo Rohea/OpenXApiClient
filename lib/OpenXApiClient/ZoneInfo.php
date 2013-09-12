@@ -74,7 +74,7 @@ class ZoneInfo extends Info
      *
      * @var integer $capping
      */
-    protected $capping;
+    protected $capping = 0;
 
     /**
      * Frequency capping: total views per period.
@@ -82,14 +82,14 @@ class ZoneInfo extends Info
      *
      * @var integer $sessionCapping
      */
-    protected $sessionCapping;
+    protected $sessionCapping = 0;
 
     /**
      * Frequency capping: reset period, in seconds.
      *
      * @var integer $block
      */
-    protected $block;
+    protected $block = 0;
 
     /**
      * This field provides any additional comments to be stored.
