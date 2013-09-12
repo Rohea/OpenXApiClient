@@ -50,6 +50,6 @@ abstract class Info
 
     public function toArray()
     {
-        return (array)$this;
+        return get_object_vars($this);
     }
 }
