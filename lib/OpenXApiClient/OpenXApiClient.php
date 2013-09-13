@@ -686,7 +686,7 @@ class OpenXApiClient
         foreach ($aTargeting as $aTargetingArray) {
             $targetingInfo = new TargetingInfo();
             $targetingInfo->readDataFromArray($aTargetingArray);
-            $aTargetingInfoObjects[] = $targetingInfo;
+            $aTargetingInfoObjects[] = $targetingInfo->toArray();
         }
         return (bool) $this->sendWithSession('ox.setBannerTargeting', array((int) $bannerId, $aTargetingInfoObjects));
     }
