@@ -249,11 +249,11 @@ class BannerInfo extends Info
 
     public function encodeImage($aImage)
     {
-        return new XML_RPC_Value(array(
-            'filename' => new XML_RPC_Value($aImage['filename']),
-            'content'  => new XML_RPC_Value($aImage['content'], 'base64'),
-            'editswf'  => new XML_RPC_Value(!empty($aImage['editswf']), 'boolean'),
-        ), 'struct');
+        return array(
+            'filename' => $aImage['filename'],
+            'content'  => \fXmlRpc\Value\Base64::serialize($aImage['content']),
+            'editswf'  => !empty($aImage['editswf']),
+        );
     }
 
     public function toArray()
