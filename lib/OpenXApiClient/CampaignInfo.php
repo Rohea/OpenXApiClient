@@ -65,53 +65,53 @@ class CampaignInfo extends Info
      *
      * @var integer $impressions
      */
-    protected $impressions;
+    protected $impressions = -1;
 
     /**
      * The clicks variable is the number of clicks booked for the campaign.
      *
      * @var integer $clicks
      */
-    protected $clicks;
+    protected $clicks = -1;
 
     /**
      * The priority variable is the priority level set for the campaign.
      *
      * @var integer $priority
      */
-    protected $priority;
+    protected $priority = 0;
 
     /**
      * The weight variable is the weight set for the campaign.
      *
      * @var integer $weight
      */
-    protected $weight;
+    protected $weight = 1;
 
     /**
      *
      * @var integer $targetImpressions
      */
-    protected $targetImpressions;
+    protected $targetImpressions = 0;
 
     /**
      *
      * @var integer $targetClick
      */
-    protected $targetClicks;
+    protected $targetClicks = 0;
 
     /**
      *
      * @var integer $targetConversions
      */
-    protected $targetConversions;
+    protected $targetConversions = 0;
 
     /**
      * Revenue amount, eg 1.55.
      *
      * @var double $revenue
      */
-    protected $revenue;
+    protected $revenue = 0.0;
 
     /**
      * Revenue type (CPM, CPA, etc) as defined in constants.php.
@@ -119,14 +119,14 @@ class CampaignInfo extends Info
      *
      * @var integer $revenueType
      */
-    protected $revenueType;
+    protected $revenueType = 1;
 
     /**
      * Frequency capping: total views per user.
      *
      * @var integer $capping
      */
-    protected $capping;
+    protected $capping = 0;
 
     /**
      * Frequency capping: total views per period.
@@ -134,14 +134,14 @@ class CampaignInfo extends Info
      *
      * @var integer $sessionCapping
      */
-    protected $sessionCapping;
+    protected $sessionCapping = 0;
 
     /**
      * Frequency capping: reset period, in seconds.
      *
      * @var integer $block
      */
-    protected $block;
+    protected $block = 0;
 
 
     /**
