@@ -432,8 +432,7 @@ class OpenXApiClient
         $statisticsData = $this->callStatisticsMethod('ox.advertiserDailyStatistics', $advertiserId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
-            $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
-                                            $data['day']));
+            $statisticsData[$key]['day'] = $data['day']->format('Y-m-d');
         }
 
         return $statisticsData;
@@ -572,7 +571,13 @@ class OpenXApiClient
      */
     public function campaignDailyStatistics($campaignId, $startDate = null, $endDate = null, $useManagerTimezone = false)
     {
-        return $this->callStatisticsMethod('ox.campaignDailyStatistics', $campaignId, $startDate, $endDate, $useManagerTimezone);
+        $statisticsData = $this->callStatisticsMethod('ox.campaignDailyStatistics', $campaignId, $startDate, $endDate, $useManagerTimezone);
+
+        foreach ($statisticsData as $key => $data) {
+            $statisticsData[$key]['day'] = $data['day']->format('Y-m-d');
+        }
+
+        return $statisticsData;
     }
 
     /**
@@ -735,8 +740,7 @@ class OpenXApiClient
         $statisticsData = $this->callStatisticsMethod('ox.bannerDailyStatistics', $bannerId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
-            $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
-                                            $data['day']));
+            $statisticsData[$key]['day'] = $data['day']->format('Y-m-d');
         }
 
         return $statisticsData;
@@ -850,8 +854,7 @@ class OpenXApiClient
         $statisticsData = $this->callStatisticsMethod('ox.publisherDailyStatistics', $publisherId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
-            $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
-                                            $data['day']));
+            $statisticsData[$key]['day'] = $data['day']->format('Y-m-d');
         }
 
         return $statisticsData;
@@ -1081,8 +1084,7 @@ class OpenXApiClient
         $statisticsData = $this->callStatisticsMethod('ox.zoneDailyStatistics', $zoneId, $startDate, $endDate, $useManagerTimezone);
 
         foreach ($statisticsData as $key => $data) {
-            $statisticsData[$key]['day'] = date('Y-m-d',XML_RPC_iso8601_decode(
-                                            $data['day']));
+            $statisticsData[$key]['day'] = $data['day']->format('Y-m-d');
         }
 
         return $statisticsData;
