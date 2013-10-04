@@ -259,10 +259,10 @@ class BannerInfo extends Info
     public function toArray()
     {
         $aInfo = parent::toArray();
-        if (isset($this->aImage)) {
+        if (!empty($this->aImage)) {
             $aInfo['aImage'] = $this->encodeImage($this->aImage);
         }
-        if (isset($this->aBackupImage)) {
+        if (!empty($this->aBackupImage)) {
             $aInfo['aBackupImage'] = $this->encodeImage($this->aBackupImage);
         }
         return $aInfo;

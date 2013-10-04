@@ -34,9 +34,15 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "lstrojny/fxmlrpc": "0.8.*"
+        "lstrojny/fxmlrpc": "dev-master"
     },
     "autoload": {
         "psr-0": { "OpenXApiClient": "lib/" }
-    }
+    },
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/mbeccati/fxmlrpc.git"
+        }
+    ]
 }
