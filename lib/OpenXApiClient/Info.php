@@ -1,7 +1,7 @@
 <?php
 /*
 +---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
+| Revive Adserver API Client                                                |
 | http://www.revive-adserver.com                                            |
 |                                                                           |
 | Copyright: See the COPYRIGHT.txt file.                                    |
@@ -12,10 +12,6 @@
 namespace OpenXApiClient;
 
 /**
- * @package    OpenXApiClient
- * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
- * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
- *
  * The Info class is the base class for all info classes.
  */
 abstract class Info

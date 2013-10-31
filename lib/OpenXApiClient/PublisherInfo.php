@@ -1,8 +1,7 @@
 <?php
-
 /*
 +---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
+| Revive Adserver API Client                                                |
 | http://www.revive-adserver.com                                            |
 |                                                                           |
 | Copyright: See the COPYRIGHT.txt file.                                    |
@@ -10,16 +9,7 @@
 +---------------------------------------------------------------------------+
 */
 
-/**
- * @package    OpenXApiClient
- * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
- * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
- *
- * This file describes the PublisherInfo class.
- */
 namespace OpenXApiClient;
-
-use OpenXApiClient\Info;
 
 /**
  *  The PublisherInfo class extends the base Info class and contains information about the publisher.

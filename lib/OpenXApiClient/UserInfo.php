@@ -1,7 +1,7 @@
 <?php
 /*
 +---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
+| Revive Adserver API Client                                                |
 | http://www.revive-adserver.com                                            |
 |                                                                           |
 | Copyright: See the COPYRIGHT.txt file.                                    |
@@ -9,14 +9,7 @@
 +---------------------------------------------------------------------------+
 */
 
-/**
- * @package    OpenXApiClient
- * @author     Matteo Beccati <matteo.beccati@openx.org>
- * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
- */
 namespace OpenXApiClient;
-
-use OpenXApiClient\Info;
 
 /**
  * The OA_Dll_UserInfo class extends the base OA_Info class and

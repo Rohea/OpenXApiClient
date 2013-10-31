@@ -1,7 +1,7 @@
 <?php
 /*
 +---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
+| Revive Adserver API Client                                                |
 | http://www.revive-adserver.com                                            |
 |                                                                           |
 | Copyright: See the COPYRIGHT.txt file.                                    |
@@ -9,16 +9,7 @@
 +---------------------------------------------------------------------------+
 */
 
-/**
- * @package    OpenXApiClient
- * @author     Ivan Klishch <iklishch@lohika.com>
- * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
- *
- * This file describes the BannerInfo class.
- */
 namespace OpenXApiClient;
-
-use OpenXApiClient\Info;
 
 /**
  *  The BannerInfo class extends the base Info class and contains information about the banner.

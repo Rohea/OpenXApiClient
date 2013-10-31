@@ -1,0 +1,23 @@
+Revive Adserver is Copyright (c) 2013 Matteo Beccati & Andrew Hill
+
+Revive Adserver thanks the following members of the community for their
+contributions to the code:
+
+ - Erik Geurts
+ - Florian Sander
+
+--------------------------------------------------------------------------------
+
+Revive Adserver is based on OpenX Source, which was Copyright (c) 2003-2013
+OpenX Limited.
+
+Openx Source was based on phpAdsNew 2, phpAdsNew 1 and phpAds, which were
+Copyright (c) 1999 - 2009 by the original authors:
+
+  - phpAdsNew 2 created by Niels Leenheer, Matteo Beccati, Noor Dawod and
+    Stefan Morgenroth.
+
+  - phpAdsNew 1 created by Wim Godden, Phil Hord, Niels Leenheer,
+    Cedric Fontaine and Michael Harvey.
+
+  - phpAds created by Tobias Ratschiller.

@@ -1,24 +1,15 @@
 <?php
 /*
 +---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
+| Revive Adserver API Client                                                |
 | http://www.revive-adserver.com                                            |
 |                                                                           |
 | Copyright: See the COPYRIGHT.txt file.                                    |
 | License: GPLv2 or later, see the LICENSE.txt file.                        |
 +---------------------------------------------------------------------------+
 */
-namespace OpenXApiClient;
 
-// Include the info-object files
-use OpenXApiClient\AdvertiserInfo;
-use OpenXApiClient\AgencyInfo;
-use OpenXApiClient\BannerInfo;
-use OpenXApiClient\CampaignInfo;
-use OpenXApiClient\PublisherInfo;
-use OpenXApiClient\TargetingInfo;
-use OpenXApiClient\UserInfo;
-use OpenXApiClient\ZoneInfo;
+namespace OpenXApiClient;
 
 use fXmlRpc\Client;
 use fXmlRpc\Exception\ResponseException;

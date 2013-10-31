@@ -1,7 +1,7 @@
 <?php
 /*
 +---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
+| Revive Adserver API Client                                                |
 | http://www.revive-adserver.com                                            |
 |                                                                           |
 | Copyright: See the COPYRIGHT.txt file.                                    |
@@ -9,16 +9,7 @@
 +---------------------------------------------------------------------------+
 */
 
-/**
- * @package    OpenXApiClient
- * @author     Andriy Petlyovanyy <apetlyovanyy@lohika.com>
- * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
- *
- * This file describes the CampaignInfo class.
- */
 namespace OpenXApiClient;
-
-use OpenXApiClient\Info;
 
 /**
  *  The campaignInfo class extends the base Info class and contains information about the campaign.

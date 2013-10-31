@@ -1,7 +1,7 @@
 <?php
 /*
 +---------------------------------------------------------------------------+
-| Revive Adserver                                                           |
+| Revive Adserver API Client                                                |
 | http://www.revive-adserver.com                                            |
 |                                                                           |
 | Copyright: See the COPYRIGHT.txt file.                                    |
@@ -9,16 +9,7 @@
 +---------------------------------------------------------------------------+
 */
 
-/**
- * @package    OpenXApiClient
- * @author     Ivan Klishch <iklishch@lohika.com>
- * @author     Tomi Saarinen <tomi.saarinen@rohea.com>
- *
- * This files describes the ZoneInfo class.
- */
 namespace OpenXApiClient;
-
-use OpenXApiClient\Info;
 
 /**
  *  The ZoneInfo class extends the base Info class and contains information about the zone.
@@ -99,24 +90,33 @@ class ZoneInfo extends Info
     protected $comments;
 
     /**
-     * This field provides appended code for this zone.
+     * The appended code for this zone.
      *
      * @var string $append
      */
     protected $append;
 
     /**
-     * This field provides the filename of the zone.
+     * The prepended code of the zone.
      *
      * @var string $prepend
      */
     protected $prepend;
 
     /**
-     * This method sets all default values when adding a new zone.
+     * The chained zone of the current zone.
+     *
+     * @var int $chainedZoneId
      */
-    public function setDefaultForAdd()
-    {
+    protected $chainedZoneId;
+
+    /**
+     * This method sets all default values when adding a new zone.
+     *
+     * @access public
+     *
+     */
+    function setDefaultForAdd() {
         if (is_null($this->type)) {
             $this->type = 0;
         }
@@ -128,6 +128,7 @@ class ZoneInfo extends Info
         if (is_null($this->height)) {
             $this->height = 0;
         }
+
         if (is_null($this->capping)) {
             // Leave null
         }
@@ -137,6 +138,10 @@ class ZoneInfo extends Info
         }
 
         if (is_null($this->block)) {
+            // Leave null
+        }
+
+        if (is_null($this->chainedZoneId)) {
             // Leave null
         }
     }
@@ -151,18 +156,19 @@ class ZoneInfo extends Info
     public function getFieldsTypes()
     {
         return array(
-            'zoneId' => 'integer',
-            'publisherId' => 'integer',
-            'zoneName' => 'string',
-            'type' => 'integer',
-            'width' => 'integer',
-            'height' => 'integer',
-            'capping' => 'integer',
-            'sessionCapping' => 'integer',
-            'block' => 'integer',
-            'comments' => 'string',
-            'append' => 'string',
-            'prepend' => 'string',
-        );
+                    'zoneId' => 'integer',
+                    'publisherId' => 'integer',
+                    'zoneName' => 'string',
+                    'type' => 'integer',
+                    'width' => 'integer',
+                    'height' => 'integer',
+                    'capping' => 'integer',
+                    'sessionCapping' => 'integer',
+                    'block' => 'integer',
+                    'comments' => 'string',
+                    'append' => 'string',
+                    'prepend' => 'string',
+                    'chainedZoneId' => 'integer',
+                );
     }
 }
