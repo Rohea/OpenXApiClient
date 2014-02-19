@@ -34,7 +34,7 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "lstrojny/fxmlrpc": "0.9.0"
+        "lstrojny/fxmlrpc": "0.8.4"
     },
     "autoload": {
         "psr-0": { "OpenXApiClient": "lib/" }
