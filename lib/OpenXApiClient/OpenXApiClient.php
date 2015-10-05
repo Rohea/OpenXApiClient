@@ -125,7 +125,6 @@ class OpenXApiClient
             }
             $response = $this->client->call($method, $data);
         } catch (ResponseException $e) {
-            var_dump($e);
             //Do something smarter?
             throw $e;
         }
